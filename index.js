@@ -34,7 +34,6 @@ async function run() {
         // Products details
         app.get('/all-products/:id', async (req, res) => {
             const id = req.params.id;
-            // const query = { _id: new ObjectId(id) };
             const result = await productsCollection.findOne({ _id: new ObjectId(id) });
             res.send(result);
         }); 
@@ -43,6 +42,24 @@ async function run() {
         app.post('/all-products', async (req, res) => {
             const product = req.body;
             const result = await productsCollection.insertOne(product);
+            res.send(result);
+        });
+
+        // GEt products filter by user email
+        app.get('/manage-products', async (req, res) => {
+            const email = req.query.email;
+            const query = {}
+                if(email){
+                    query.userEmail = email
+                }
+            const result = await productsCollection.find(query).toArray();
+            res.send(result);
+        });
+
+        // Manage products (delete)
+        app.delete('/manage-products/:id', async (req, res) => {
+            const id = req.params.id;
+            const result = await productsCollection.deleteOne({ _id: new ObjectId(id)});
             res.send(result);
         });
 
@@ -56,6 +73,7 @@ run().catch(console.dir);
 app.get('/', (req, res)=> {
     res.send('NextShop Server is Running...')
 })
+
 
 app.listen(port, ()=> {
     console.log(`Server running on port: ${port}`);
