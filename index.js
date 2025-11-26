@@ -39,6 +39,13 @@ async function run() {
             res.send(result);
         }); 
 
+        // Add a product
+        app.post('/all-products', async (req, res) => {
+            const product = req.body;
+            const result = await productsCollection.insertOne(product);
+            res.send(result);
+        });
+
         console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
     // await client.close();
