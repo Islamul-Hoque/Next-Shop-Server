@@ -25,6 +25,12 @@ async function run() {
         const db = client.db("nextShopDB");
         const productsCollection = db.collection('products')
 
+        // Latest Products (Home page)
+        app.get('/latest-products', async(req, res) => {
+            const result =await productsCollection.find().sort({ createdAt: -1}).limit(4).toArray()
+            res.send(result)
+        })
+
         // All products
         app.get('/all-products', async (req, res) => {
             const result = await productsCollection.find().sort({ createdAt: -1 }).toArray();
